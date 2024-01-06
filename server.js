@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 const { Users, Posts } = require("./models");
 const db = require("./models/index.js");
@@ -13,6 +14,7 @@ app.use(cookieParser());
 app.use(cors());
 
 const port = 4000;
+const SECRET_KEY = "100xMicrobloggingSocialMediaApp";
 
 app.get("/healthcheck", async (req, res) => {
   try {
@@ -42,7 +44,7 @@ app.post("/signup", async (req, res) => {
   try {
     const saltCount = 10;
     const hashedPassword = await bcrypt.hash(req.body.password, saltCount);
-    await Users.create({
+    const user = await Users.create({
       displayName: req.body.displayName,
       username: req.body.username,
       email: req.body.email,
@@ -55,7 +57,8 @@ app.post("/signup", async (req, res) => {
       headerPicUrl: req.body.headerPicUrl,
     });
 
-    res.status(201).send({ message: "User created!" });
+    const jwtToken = jwt.sign({ email: user.email, id: user.id }, SECRET_KEY);
+    res.status(201).send({ message: "User created!", token: jwtToken });
   } catch (error) {
     res.status(500).send({ error: "Failed to Create  user" });
     console.log(error);
@@ -76,14 +79,14 @@ app.post("/login", async (req, res) => {
     if (!isValidPassword) {
       return res.status(401).send("Invalid credentials");
     }
-
+    const jwtToken = jwt.sign({ email: user.email, id: user.id }, SECRET_KEY);
     res.cookie("user_id", user.id, {
       httpOnly: true,
       // secure:true,
       maxAge: 3600000,
     });
 
-    res.status(200).send("LoggedIn");
+    res.status(200).send({ message: "LoggedIn", token: jwtToken });
   } catch (err) {
     console.error("Error during login", err);
     console.log(email, password);
