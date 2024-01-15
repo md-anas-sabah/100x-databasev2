@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
   Likes.init(
     {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.BIGINT,
       },
       userId: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: user,
           key: "id",
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       postid: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: post,
           key: "id",
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       likedAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

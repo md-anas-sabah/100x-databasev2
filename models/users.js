@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Users.init(
     {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.BIGINT,
@@ -22,16 +22,16 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING(50),
         unique: true,
-        allowNull: false,
+        allowNull: true,
       },
       displayName: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: DataTypes.STRING(120),
         unique: true,
-        allowNull: false,
+        allowNull: true,
       },
       location: {
         type: DataTypes.STRING(100),
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       bio: {
         type: DataTypes.TEXT(200),
-        allowNull: false,
+        allowNull: true,
       },
       website: {
         type: DataTypes.STRING(100),
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       dateOfBirth: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
         validate: {
           isAbove13(value) {
             const today = new Date();
@@ -62,17 +62,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       createdAt: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
         defaultValue: DataTypes.NOW,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
       password: {
         type: DataTypes.STRING(256),
-        allowNull: false,
+        allowNull: true,
       },
       profilePicUrl: {
         type: DataTypes.STRING(1024),

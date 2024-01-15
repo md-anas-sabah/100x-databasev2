@@ -15,14 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   Follows.init(
     {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
       followerID: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: user,
           key: "id",
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       followingId: {
         type: DataTypes.BIGINT,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: user,
           key: "id",
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamp: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

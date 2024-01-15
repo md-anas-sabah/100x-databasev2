@@ -80,7 +80,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).send("Invalid credentials");
     }
     const jwtToken = jwt.sign({ email: user.email, id: user.id }, SECRET_KEY);
-    res.cookie("user_id", user.id, {
+    res.cookie("user_id", jwtToken, {
       httpOnly: true,
       // secure:true,
       maxAge: 3600000,

@@ -4,13 +4,13 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Posts", {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT,
       },
       type: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.ENUM("repost", "post", "reply"),
         defaultValue: "post",
       },
@@ -24,7 +24,7 @@ module.exports = {
       },
       userId: {
         type: Sequelize.BIGINT,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Users",
           key: "id",
@@ -32,7 +32,7 @@ module.exports = {
       },
       content: {
         type: Sequelize.STRING(280),
-        allowNull: false,
+        allowNull: true,
       },
       postedAt: {
         type: Sequelize.DATE,
@@ -41,7 +41,7 @@ module.exports = {
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
-        allowNull: false,
+        allowNull: true,
       },
       deletedAt: {
         type: Sequelize.DATE,
@@ -49,7 +49,7 @@ module.exports = {
       },
 
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
       },
     });

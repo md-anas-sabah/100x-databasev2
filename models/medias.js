@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       index: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       postedId: {
         type: DataTypes.BIGINT,
@@ -28,12 +28,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       url: {
         type: DataTypes.STRING(2048),
-        allowNull: false,
+        allowNull: true,
       },
       type: {
         type: DataTypes.ENUM,
         values: ["image", "video", "gif"],
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

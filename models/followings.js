@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Followings.init(
     {
       followedId: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
@@ -30,11 +30,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
       },
       createdAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.DATE,
       },
     },

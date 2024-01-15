@@ -7,40 +7,40 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Users", {
       id: {
-        allowNull: false,
+        allowNull: true,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.BIGINT,
       },
       username: {
+        allowNull: true,
         type: Sequelize.STRING(50),
         unique: true,
-        allowNull: false,
       },
       displayName: {
+        allowNull: true,
         type: Sequelize.STRING(50),
-        allowNull: false,
       },
       email: {
+        allowNull: true,
         type: Sequelize.STRING(120),
         unique: true,
-        allowNull: false,
       },
       location: {
-        type: Sequelize.STRING(100),
         allowNull: true,
+        type: Sequelize.STRING(100),
       },
       bio: {
+        allowNull: true,
         type: Sequelize.TEXT(200),
-        allowNull: false,
       },
       website: {
-        type: Sequelize.STRING(100),
         allowNull: true,
+        type: Sequelize.STRING(100),
       },
       dateOfBirth: {
+        allowNull: true,
         type: Sequelize.DATE,
-        allowNull: false,
         validate: {
           isAbove13(value) {
             const today = new Date();
@@ -55,17 +55,17 @@ module.exports = {
       },
       createdAt: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
         defaultValue: Sequelize.NOW,
       },
       updatedAt: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
       },
       password: {
         type: Sequelize.STRING(256),
-        allowNull: false,
+        allowNull: true,
       },
       profilePicUrl: {
         type: Sequelize.STRING(1024),
