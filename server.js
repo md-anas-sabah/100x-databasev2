@@ -16,22 +16,19 @@ app.use(cors());
 
 const port = 4000;
 const SECRET_KEY = "100xMicrobloggingSocialMediaApp";
+let verificationOTP;
+let token;
 
-// const sendVerificationCode = async (email, verificationCode) => {
-//   try {
-//     const mailOptions = {
-//       from: process.env.USER,
-//       to: email,
-//       subject: "100x Verification Code",
-//       text: `Your verification code is: ${verificationCode}`,
-//     };
+function generateOneTimePassword() {
+  return Math.floor(10000 + Math.random() * 900000);
+}
 
-//     const result = await transporter.sendMail(mailOptions);
-//     console.log("Verification code sent:", result);
-//   } catch (error) {
-//     console.error("Error sending verification code:", error);
-//   }
-// };
+const transporter = nodemailer.createTransport({
+  host: smtp.gmail.com,
+  port: 587,
+  secure: false,
+  
+});
 
 app.get("/healthcheck", async (req, res) => {
   try {
@@ -81,32 +78,6 @@ app.post("/signup", async (req, res) => {
     console.log(error);
     console.log(req.body);
   }
-});
-
-app.post("/verifyOtp", async (req, res) => {
-  const { email } = req.body;
-  let transporter = nodemailer.createTransport({
-    host: process.env.HOST,
-    service: process.env.SERVICE,
-    port: Number(process.env.EMAIL_PORT),
-    secure: Boolean(process.env.SECURE),
-    auth: {
-      user: process.env.USER,
-      pass: process.env.PASS,
-    },
-  });
-  const message = {
-    from: "100x Social Media App <team@100xapp.com>",
-    to: `${email}`,
-    subject: "100x app verification code",
-    text: "Hey Buddy",
-  };
-
-  let info = await transporter.sendMail(message);
-  console.log("Message Sent: ", info.messageId);
-  console.log("Preview URL: ", nodemailer.getTestMessageUrl(info));
-
-  res.send("EMail sent!!");
 });
 
 app.post("/login", async (req, res) => {
