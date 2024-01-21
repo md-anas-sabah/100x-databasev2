@@ -13,22 +13,29 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+require("dotenv").config();
 
 const port = 4000;
 const SECRET_KEY = "100xMicrobloggingSocialMediaApp";
-let verificationOTP;
-let token;
+
+// ---------------------------------Generating OTP-------------------------------
+let oneTimePassword;
 
 function generateOneTimePassword() {
   return Math.floor(10000 + Math.random() * 900000);
 }
 
 const transporter = nodemailer.createTransport({
-  host: smtp.gmail.com,
-  port: 587,
-  secure: false,
-  
+  host: process.env.HOST,
+  port: process.env.EMAIL_PORT,
+  service: process.env.SERVICE,
+  secure: process.env.SECURE,
+  auth: {
+    user: process.env.USER,
+    pass: process.env.PASS,
+  },
 });
+// ---------------------------------Generating OTP-------------------------------
 
 app.get("/healthcheck", async (req, res) => {
   try {
@@ -80,6 +87,16 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+app.post("/checkEmail", async (req, res) => {
+  const { email } = req.body;
+  const userEmail = await Users.findOne({ where: { email } });
+  if (!userEmail) {
+    return res.status(400).send({ message: "Unable to detect email" });
+  } else {
+    return res.status(200).send({ message: "Email Detected" });
+  }
+});
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -116,6 +133,31 @@ app.get("/feed", authenticateUser, async (req, res) => {
     res.status(500).json({ error: "failed to fetch posts" });
   }
 });
+
+// ---------------------------------Generating OTP-------------------------------
+
+app.post("/verify", async (req, res) => {
+  // const { email } = req.body;
+  oneTimePassword = generateOneTimePassword();
+
+  const mailOpt = {
+    from: process.env.USER,
+    to: req.body.email,
+    subject: "Your 100x verification code.",
+    text: `Your verification code is ${oneTimePassword}`,
+  };
+  transporter.sendMail(mailOpt, function (error, info) {
+    if (error) {
+      console.log(error);
+      res.status(500).send({ message: "Sending Verification Failed" });
+    } else {
+      res.status(200).send({ message: "Success", otp: `${oneTimePassword}` });
+    }
+  });
+  res.status(200).send({ message: "Success", otp: `${oneTimePassword}` });
+});
+
+// ---------------------------------Generating OTP-------------------------------
 
 app.listen(port, () => {
   console.log("app running on port 4000");
