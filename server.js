@@ -103,12 +103,14 @@ app.post("/login", async (req, res) => {
   try {
     const user = await Users.findOne({ where: { email } });
     if (!user) {
-      return res.status(400).send("User not found");
+      return res.status(400).send({ message: "User not found" });
     }
 
-    const isValidPassword = bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    console.log(isValidPassword);
+
     if (!isValidPassword) {
-      return res.status(401).send("Invalid credentials");
+      return res.status(401).send({ message: "Invalid credentials" });
     }
     const jwtToken = jwt.sign({ email: user.email, id: user.id }, SECRET_KEY);
     res.cookie("user_id", jwtToken, {
@@ -137,7 +139,6 @@ app.get("/feed", authenticateUser, async (req, res) => {
 // ---------------------------------Generating OTP-------------------------------
 
 app.post("/verify", async (req, res) => {
-  // const { email } = req.body;
   oneTimePassword = generateOneTimePassword();
 
   const mailOpt = {
